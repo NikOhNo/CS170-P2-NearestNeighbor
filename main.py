@@ -70,8 +70,44 @@ def accuracy():
     accuracy = number_correctly_classified / data.shape[0]
     return accuracy
 
+def select_data():
+    testFile = input(f"Type in the name of the file to test : ")
+
+    try:
+        data = np.loadtxt(testFile) 
+        return data
+
+    except FileNotFoundError:
+        print(f"Error: The file '{testFile}' was not found. Please check the file name and try again.")
+        select_data()
+    except ValueError:
+        print(f"Error: The data in '{testFile}' has an incorrect format. Please check the file.")
+        select_data()
+    except Exception as e:
+        print(f"An unexpected error occurred while loading data: {e}")
+        select_data()
+    
+def select_algorithm():
+    print(f"Type the number of the algorithm you want to run.")
+    print(f"\t1) Forward Selection")
+    print(f"\t2) Backward Elimination")
+    algorithm = input()
+
+    if (algorithm == "1"):
+        forward_feature_search(data)
+    elif (algorithm == "2"):
+        backward_feature_search(data)
+    else:
+        print(f"Unrecognized algorithm entered")
+        select_algorithm()
+
 def main():
-    accuracy()
+    print(f"Welcome to Niko Udria's Feature Selection Algorithm.")
+    # comments for easy filename copy paste
+    # CS170_Large_Data__62.txt
+    # CS170_Small_Data__12.txt
+    select_data()
+    select_algorithm()
 
 if __name__ == "__main__":
     main()
