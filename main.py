@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import time
 import math
 
 def leave_one_out_cross_validation(data, current_set, feature_to_add):
@@ -12,6 +13,8 @@ def leave_one_out_cross_validation(data, current_set, feature_to_add):
 
 def forward_feature_search(data):
     print_data_info(data)
+
+    startTime = time.time()
 
     current_set_of_features = [] # initialize an empty set
 
@@ -44,7 +47,10 @@ def forward_feature_search(data):
             best_overall_accuracy = best_so_far_accuracy
             best_overall_feature_set = current_set_of_features.copy()
     
-    print(f"Finished search!! The best feature subset is {best_overall_feature_set}, which has an accuracy of {best_overall_accuracy:.1f}%\n")
+    endTime = time.time()
+    print(f"Finished search!! The best feature subset is {best_overall_feature_set}, which has an accuracy of {best_overall_accuracy:.1f}%")
+    elapsed_time = endTime - startTime
+    print_time(elapsed_time)
 
 # TODO: implement backward feature search
 def backward_feature_search(data):
@@ -85,6 +91,25 @@ def print_data_info(data):
     allAccuracy = accuracy(data)
     print(f"Running nearest neighbor with all {cols - 1} features, using \"leaving-one-out\" evaluation, I get an accuracy of {allAccuracy:.1f}%\n")
 
+def print_time(seconds):
+    days = seconds // (24 * 3600)
+    seconds %= (24 * 3600)
+    hours = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+
+    time_parts = []
+    if days > 0:
+        time_parts.append(f"{int(days)} days")
+    if hours > 0:
+        time_parts.append(f"{int(hours)} hours")
+    if minutes > 0:
+        time_parts.append(f"{int(minutes)} minutes")
+    if seconds > 0 or (days == 0 and hours == 0 and minutes == 0):
+        time_parts.append(f"{int(seconds)} seconds")
+
+    print(f"Elapsed Time: {', '.join(time_parts)}\n")
 
 def select_data():
     testFile = input(f"Type in the name of the file to test : ")
