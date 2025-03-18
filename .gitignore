@@ -172,3 +172,5 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+/CS170_Large_Data__12.txt
+/CS170_Large_Data__17.txt

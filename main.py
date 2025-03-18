@@ -5,10 +5,16 @@ import math
 
 def leave_one_out_cross_validation(data, current_set, feature_to_add):
     # features we care about are label, current_set, and feature_to_add
-    feature_indices = [0] + current_set + [feature_to_add]
+    if feature_to_add is None:
+        feature_indices = [0] + current_set
+        feature_display = current_set
+    else:
+        feature_indices = [0] + current_set + [feature_to_add]
+        feature_display = current_set + [feature_to_add]
+
     subsetData = data[:, feature_indices]
     subsetAccuracy = accuracy(subsetData)
-    print(f"\tUsing feature(s) {current_set + [feature_to_add]} accuracy is {subsetAccuracy:.1f}%")
+    print(f"\tUsing feature(s) {feature_display} accuracy is {subsetAccuracy:.1f}%")
     return subsetAccuracy
 
 def forward_feature_search(data):
@@ -54,7 +60,50 @@ def forward_feature_search(data):
 
 # TODO: implement backward feature search
 def backward_feature_search(data):
-    return None
+    print_data_info(data)
+
+    startTime = time.time()
+
+    current_set_of_features = [] # initialize a set with all features
+    for i in range(1, data.shape[1]):
+        current_set_of_features.append(i)
+
+    best_overall_feature_set = []
+    best_overall_accuracy = 0
+
+    # from column 2 (start of features) to end
+    for i in range(1, data.shape[1]):
+        #print(f"On the {i}th level of the search tree")
+        feature_to_exclude = None
+        best_so_far_accuracy = 0
+
+        # from column 2 to end
+        for k in range(1, data.shape[1]):
+            if (current_set_of_features.__contains__(k) == True):  # only add unconsidered features
+                copy_current_set = current_set_of_features.copy()
+                # remove the feature from copy and test
+                copy_current_set.remove(k)  
+                accuracy = leave_one_out_cross_validation(data, copy_current_set, None)
+
+                if (accuracy > best_so_far_accuracy):   # found a better accuracy feature
+                    best_so_far_accuracy = accuracy
+                    feature_to_exclude = k
+        
+        current_set_of_features.remove(feature_to_exclude)
+
+        print("")
+        if (best_so_far_accuracy < best_overall_accuracy):
+            print(f"(Warning, Accuracy has decreased! Continuing search in case of local maxima)")
+        print(f"Feature set {current_set_of_features} was best, accuracy is {best_so_far_accuracy:.1f}%\n")
+        # check if its our new overall best
+        if (best_so_far_accuracy > best_overall_accuracy):
+            best_overall_accuracy = best_so_far_accuracy
+            best_overall_feature_set = current_set_of_features.copy()
+    
+    endTime = time.time()
+    print(f"Finished search!! The best feature subset is {best_overall_feature_set}, which has an accuracy of {best_overall_accuracy:.1f}%")
+    elapsed_time = endTime - startTime
+    print_time(elapsed_time)
 
 def accuracy(data):
     number_correctly_classified = 0
