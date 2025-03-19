@@ -10,6 +10,8 @@ This dataset has 6 features (not including the class attribute), with 500 instan
 
 Running nearest neighbor with all 6 features, using "leaving-one-out" evaluation, I get an accuracy of 81.6%
 
+Beginning search. 
+
         Using feature(s) [1] accuracy is 76.2%
         Using feature(s) [2] accuracy is 75.8%
         Using feature(s) [3] accuracy is 76.0%

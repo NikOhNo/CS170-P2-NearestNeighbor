@@ -139,6 +139,7 @@ def print_data_info(data):
     print(f"This dataset has {cols - 1} features (not including the class attribute), with {rows} instances.\n")
     allAccuracy = accuracy(data)
     print(f"Running nearest neighbor with all {cols - 1} features, using \"leaving-one-out\" evaluation, I get an accuracy of {allAccuracy:.1f}%\n")
+    print(f"Beginning search. \n")
 
 def print_time(seconds):
     days = seconds // (24 * 3600)
