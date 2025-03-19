@@ -4,7 +4,7 @@ Type in the name of the file to test : CS170_Small_Data__12.txt
 Type the number of the algorithm you want to run.
         1) Forward Selection
         2) Backward Elimination
-2
+2                       
 
 This dataset has 6 features (not including the class attribute), with 500 instances.
 
@@ -48,10 +48,5 @@ Feature set {2, 5} was best, accuracy is 96.2%
 (Warning, Accuracy has decreased! Continuing search in case of local maxima)
 Feature set {5} was best, accuracy is 84.2%
 
-        Using feature(s) {} accuracy is 86.6%
-
-(Warning, Accuracy has decreased! Continuing search in case of local maxima)
-Feature set {} was best, accuracy is 86.6%
-
 Finished search!! The best feature subset is {2, 5}, which has an accuracy of 96.2%
-Elapsed Time: 15 seconds
+Elapsed Time: 14 seconds

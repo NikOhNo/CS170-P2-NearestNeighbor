@@ -14,7 +14,7 @@ def leave_one_out_cross_validation(data, current_set, feature_to_add):
 
     subsetData = data[:, feature_indices]
     subsetAccuracy = accuracy(subsetData)
-    print(f"\tUsing feature(s) {feature_display} accuracy is {subsetAccuracy:.1f}%")
+    print(f"\tUsing feature(s) {curly_list(feature_display)} accuracy is {subsetAccuracy:.1f}%")
     return subsetAccuracy
 
 def forward_feature_search(data):
@@ -47,14 +47,14 @@ def forward_feature_search(data):
         print("")
         if (best_so_far_accuracy < best_overall_accuracy):
             print(f"(Warning, Accuracy has decreased! Continuing search in case of local maxima)")
-        print(f"Feature set {current_set_of_features} was best, accuracy is {best_so_far_accuracy:.1f}%\n")
+        print(f"Feature set {curly_list(current_set_of_features)} was best, accuracy is {best_so_far_accuracy:.1f}%\n")
         # check if its our new overall best
         if (best_so_far_accuracy > best_overall_accuracy):
             best_overall_accuracy = best_so_far_accuracy
             best_overall_feature_set = current_set_of_features.copy()
     
     endTime = time.time()
-    print(f"Finished search!! The best feature subset is {best_overall_feature_set}, which has an accuracy of {best_overall_accuracy:.1f}%")
+    print(f"Finished search!! The best feature subset is {curly_list(best_overall_feature_set)}, which has an accuracy of {best_overall_accuracy:.1f}%")
     elapsed_time = endTime - startTime
     print_time(elapsed_time)
 
@@ -72,7 +72,7 @@ def backward_feature_search(data):
     best_overall_accuracy = 0
 
     # from column 2 (start of features) to end
-    for i in range(1, data.shape[1]):
+    for i in range(1, data.shape[1] - 1):
         #print(f"On the {i}th level of the search tree")
         feature_to_exclude = None
         best_so_far_accuracy = 0
@@ -94,14 +94,14 @@ def backward_feature_search(data):
         print("")
         if (best_so_far_accuracy < best_overall_accuracy):
             print(f"(Warning, Accuracy has decreased! Continuing search in case of local maxima)")
-        print(f"Feature set {current_set_of_features} was best, accuracy is {best_so_far_accuracy:.1f}%\n")
+        print(f"Feature set {curly_list(current_set_of_features)} was best, accuracy is {best_so_far_accuracy:.1f}%\n")
         # check if its our new overall best
         if (best_so_far_accuracy > best_overall_accuracy):
             best_overall_accuracy = best_so_far_accuracy
             best_overall_feature_set = current_set_of_features.copy()
     
     endTime = time.time()
-    print(f"Finished search!! The best feature subset is {best_overall_feature_set}, which has an accuracy of {best_overall_accuracy:.1f}%")
+    print(f"Finished search!! The best feature subset is {curly_list(best_overall_feature_set)}, which has an accuracy of {best_overall_accuracy:.1f}%")
     elapsed_time = endTime - startTime
     print_time(elapsed_time)
 
@@ -160,6 +160,9 @@ def print_time(seconds):
         time_parts.append(f"{int(seconds)} seconds")
 
     print(f"Elapsed Time: {', '.join(time_parts)}\n")
+
+def curly_list(lst):
+    return f"{{{', '.join(map(str, lst))}}}"
 
 def select_data():
     testFile = input(f"Type in the name of the file to test : ")
