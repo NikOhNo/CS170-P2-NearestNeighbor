@@ -9,6 +9,7 @@ Type the number of the algorithm you want to run.
 This dataset has 6 features (not including the class attribute), with 500 instances.
 
 Running nearest neighbor with all 6 features, using "leaving-one-out" evaluation, I get an accuracy of 81.6%
+Default rate of dataset is 86.6%
 
 Beginning search. 
 

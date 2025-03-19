@@ -5,7 +5,10 @@ import math
 
 def leave_one_out_cross_validation(data, current_set, feature_to_add):
     # features we care about are label, current_set, and feature_to_add
-    if feature_to_add is None:
+    if current_set is None:
+        feature_indices = [0]
+        feature_display = []
+    elif feature_to_add is None:
         feature_indices = [0] + current_set
         feature_display = current_set
     else:
@@ -16,6 +19,15 @@ def leave_one_out_cross_validation(data, current_set, feature_to_add):
     subsetAccuracy = accuracy(subsetData)
     print(f"\tUsing feature(s) {curly_list(feature_display)} accuracy is {subsetAccuracy:.1f}%")
     return subsetAccuracy
+
+def calculate_default_rate(data):
+    labels = data[:, 0]     # Extract the labels from the 0th column
+    number_of_defaults = np.sum(labels == 2)
+    total_points = data.shape[0]
+
+    # Compute the default rate as a percentage
+    default_rate = (number_of_defaults / total_points) * 100
+    return default_rate
 
 def forward_feature_search(data):
     print_data_info(data)
@@ -52,7 +64,7 @@ def forward_feature_search(data):
         if (best_so_far_accuracy > best_overall_accuracy):
             best_overall_accuracy = best_so_far_accuracy
             best_overall_feature_set = current_set_of_features.copy()
-    
+
     endTime = time.time()
     print(f"Finished search!! The best feature subset is {curly_list(best_overall_feature_set)}, which has an accuracy of {best_overall_accuracy:.1f}%")
     elapsed_time = endTime - startTime
@@ -72,7 +84,7 @@ def backward_feature_search(data):
     best_overall_accuracy = 0
 
     # from column 2 (start of features) to end
-    for i in range(1, data.shape[1] - 1):
+    for i in range(1, data.shape[1]):
         #print(f"On the {i}th level of the search tree")
         feature_to_exclude = None
         best_so_far_accuracy = 0
@@ -104,6 +116,7 @@ def backward_feature_search(data):
     print(f"Finished search!! The best feature subset is {curly_list(best_overall_feature_set)}, which has an accuracy of {best_overall_accuracy:.1f}%")
     elapsed_time = endTime - startTime
     print_time(elapsed_time)
+    print("")
 
 def accuracy(data):
     number_correctly_classified = 0
@@ -138,7 +151,9 @@ def print_data_info(data):
     rows, cols = data.shape
     print(f"This dataset has {cols - 1} features (not including the class attribute), with {rows} instances.\n")
     allAccuracy = accuracy(data)
-    print(f"Running nearest neighbor with all {cols - 1} features, using \"leaving-one-out\" evaluation, I get an accuracy of {allAccuracy:.1f}%\n")
+    print(f"Running nearest neighbor with all {cols - 1} features, using \"leaving-one-out\" evaluation, I get an accuracy of {allAccuracy:.1f}%")
+    default_rate = calculate_default_rate(data)
+    print(f"Default rate of dataset is {default_rate:.1f}%\n")
     print(f"Beginning search. \n")
 
 def print_time(seconds):
